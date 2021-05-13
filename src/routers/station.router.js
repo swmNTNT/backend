@@ -90,33 +90,26 @@ stationRouter.post('/reserve', async (req, res, next) => {
 
 stationRouter.get('/:stId', async (req, res, next) => {
   const { stId: stationId } = req.params;
-  const { lat, lng } = req.query;
 
   try {
-    const chargers = await Station.find({ stId: stationId })
+    const targetChargers = await Station.find({ stId: stationId })
+    const stationInfo = {
+      address: targetChargers[0].addr,
+      name: targetChargers[0].stNm,
+      numOfChargers: targetChargers.length,
+      availableChargers: 0,
+      chargers: []
+    }
 
-    chargerData.distanceFrom = getDistance(
-      {
-        lat: charger.lat, lng: charger.lng
-      },
-      {
-        lat, lng
+    for (const charger of targetChargers) {
+      if (charger.chgerStat === "2") {
+        stationInfo.availableChargers++
       }
-    )
-    // for (const charger of chargers) {
-    //   const chargerData = { ...charger }
-    //   // chargerData.distanceFrom = getDistance(
-    //   //   {
-    //   //     lat: charger.lat, lng: charger.lng
-    //   //   },
-    //   //   {
-    //   //     lat, lng
-    //   //   }
-    //   // )
-    // }
-    // chargerDataSet.push(chargerData);
 
-    apiResponser({ req, res, data: reserveEmailList, message: 'Many Many Queue here' })
+      stationInfo.chargers.push(charger)
+    }
+
+    apiResponser({ req, res, data: stationInfo, message: 'Many Many Queue here' })
   } catch (e) {
     next(e);
   }
