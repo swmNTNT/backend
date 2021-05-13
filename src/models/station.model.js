@@ -9,7 +9,7 @@ const stationSchema = new mongoose.Schema({
     type: {type: String, required: true},
     lat: {type: String, required: true},
     lng: {type: String, required: true},
-    time: {type: String, required: true}
+    time: {type: String }
 });
 
 export default mongoose.model("Station", stationSchema);
