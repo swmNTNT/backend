@@ -10,7 +10,7 @@ const errorHandler = (err, req, res, next) => {
     stack: err?.stack
   }
 
-  logger.error(errorObject);
+  logger.error(JSON.stringify(errorObject));
 
   apiResponser({ req, res, statusCode: err?.status || 500, data: errorObject, message: err?.message })
 }
