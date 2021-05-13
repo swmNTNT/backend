@@ -3,6 +3,7 @@ import pkg from 'geolib';
 import Station from '../models/station.model.js'
 import redisClient from '../util/redisClient.js'
 import { apiResponser } from '../util/apiResponser.js';
+import { sendMail } from '../util/mailer.js';
 
 const stationRouter = Router();
 const { getDistance } = pkg;
@@ -13,8 +14,6 @@ function compare(a, b) {
 
   return 0;
 }
-
-// nums.sort(compare);
 
 stationRouter.post('/nearby', async (req, res, next) => {
   const { minLat, maxLat, minLng, maxLng, userLat, userLng } = req.body;
@@ -37,7 +36,7 @@ stationRouter.post('/nearby', async (req, res, next) => {
           lat: station.lat, lng: station.lng
         }
       )
-      
+
       if (distance <= 2000) {
         stationStatus.distanceFrom = distance
         resultValues.push(stationStatus);
@@ -46,7 +45,7 @@ stationRouter.post('/nearby', async (req, res, next) => {
 
     resultValues.sort(compare)
 
-    apiResponser({ req, res, data: resultValues, message: "Adjacent stations" })
+    apiResponser({ req, res, data: resultValues, message: "Adjacent stations in 2km." })
   } catch (e) {
     next(e);
   }
@@ -58,7 +57,7 @@ stationRouter.get('/reserve/:stId', async (req, res, next) => {
   try {
     const reserveEmailList = await redisClient.lrange(stationId, 0, -1);
 
-    apiResponser({ req, res, data: reserveEmailList, message: 'Many Many Queue here' })
+    apiResponser({ req, res, data: reserveEmailList, message: `There're ${reserveEmailList.length} people in waiting queue` })
   } catch (e) {
     next(e);
   }
@@ -70,8 +69,12 @@ stationRouter.post('/reserve', async (req, res, next) => {
   try {
     const stationData = await Station.find({ stId: stationId });
 
+    if (stationData.length === 0) {
+      return apiResponser({ req, res, statusCode: 400, message: "Not a station" })
+    }
+
     const stationStatus = {
-      availableCharger: 0,
+      availableChargers: 0,
       maxCharger: stationData.length,
       stationId: stationData[0].stId,
       address: stationData[0].addr,
@@ -80,18 +83,22 @@ stationRouter.post('/reserve', async (req, res, next) => {
 
     for (const data of stationData) {
       if (data.chgerStat === "2") {
-        stationStatus.availableCharger++
+        stationStatus.availableChargers++
       }
     }
 
     // console.log(stationStatus)
 
-    if (stationStatus.availableCharger === 0) {
-      redisClient.lpush(stationId, email);
-      // email 리스트를 참고하여 이메일 보내기
+    if (stationStatus.availableChargers === 0) {
+      await redisClient.lpush(stationId, email);
+      const emailReceivers = await redisClient.lrange(stationId, 0, -1)
+
+      console.log(emailReceivers)
+
+      sendMail({ type: "reserve", stationInfo: stationStatus, mailReceiver: email })
       apiResponser({ req, res, data: stationStatus, message: 'Now you are in queue' })
     } else {
-      apiResponser({ req, res, data: stationStatus, message: 'You cannot reserve charger' })
+      apiResponser({ req, res, statusCode: 400, data: stationStatus, message: 'You cannot reserve charger' })
     }
   } catch (e) {
     next(e);
@@ -120,7 +127,7 @@ stationRouter.get('/:stId', async (req, res, next) => {
       stationInfo.chargers.push(charger)
     }
 
-    apiResponser({ req, res, data: stationInfo, message: 'Many Many Queue here' })
+    apiResponser({ req, res, data: stationInfo, message: 'Show station\'s status' })
   } catch (e) {
     next(e);
   }
