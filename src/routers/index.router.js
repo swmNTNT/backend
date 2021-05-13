@@ -1,13 +1,22 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import userRouter from './user.router.js';
 
 export const indexRouter = Router();
 
-indexRouter.get('/', (req,res,next) => {
-    res.status(200).json({message: "hello world!"});
+indexRouter.get('/', (req, res, next) => {
+  res.status(200).json({ message: "hello world!" });
 });
 
+indexRouter.get('/error', (req, res, next) => {
+  try {
+    throw new Error('Hello Error router')
+  } catch (e) {
+    next(e)
+  }
+})
+
 indexRouter.use("/user", userRouter);
+
 
 // indexRouter.get('/:name', (req,res,next) => {
 //     const {name} = req.params;
