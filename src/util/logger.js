@@ -1,12 +1,16 @@
 import fs from 'fs';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
 import winston from 'winston';
 import WinstonDaily from 'winston-daily-rotate-file'
 
 // next to src dir
-const logDirectory = `${__dirname}/../../logs`
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const logDir = `${__dirname}/../../logs`
 
-if (!fs.existsSync(logDirectory)) {
-  fs.mkdirSync(logDirectory)
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir)
 }
 
 const { combine, printf } = winston.format
