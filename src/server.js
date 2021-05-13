@@ -1,5 +1,6 @@
 import express from 'express';
 import compression from 'compression';
+import cors from 'cors';
 
 import indexRouter from './routers/index.router.js';
 import { connectMongoDB } from './util/database.js';
@@ -12,6 +13,7 @@ const port = 3000;
 
 app.use(express.json());
 app.use(compression());
+app.use(cors({ origin: '*' }));
 
 connectMongoDB();
 dataUpdateRoutine();
