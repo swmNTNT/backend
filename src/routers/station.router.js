@@ -1,12 +1,11 @@
 import { Router } from 'express';
-import pkg from 'geolib';
+import { getDistance } from 'geolib';
 import Station from '../models/station.model.js'
 import redisClient from '../util/redisClient.js'
 import { apiResponser } from '../util/apiResponser.js';
 import { sendMail } from '../util/mailer.js';
 
 const stationRouter = Router();
-const { getDistance } = pkg;
 
 function compare(a, b) {
   if (a.distanceFrom > b.distanceFrom) return 1;

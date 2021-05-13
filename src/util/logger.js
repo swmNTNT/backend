@@ -1,12 +1,8 @@
 import fs from 'fs';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-
 import winston from 'winston';
 import WinstonDaily from 'winston-daily-rotate-file'
 
 // next to src dir
-const __dirname = dirname(fileURLToPath(import.meta.url));
 const logDir = `${__dirname}/../../logs`
 
 if (!fs.existsSync(logDir)) {
