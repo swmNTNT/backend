@@ -4,23 +4,15 @@ import { apiResponser } from '../util/apiResponser.js';
 
 const stationRouter = Router();
 
-stationRouter.get('/all', async (req, res, next) => {
-  const stations = await Station.find();
+// stationRouter.get('/all', async (req, res, next) => {
+//   try {
+//     const allStations = await Station.find().lean();
 
-  res.json({ length: stations.length, data: stations })
-});
-
-stationRouter.get('/:stationId', async (req, res, next) => {
-  const { stationId } = req.params;
-
-  try {
-    const targetStations = await Station.find({ stId: stationId })
-
-    apiResponser({ req, res, data: targetStations, message: "A station infomation" })
-  } catch (e) {
-    next(e)
-  }
-})
+//     apiResponser({ req, res, data: allStations, message: "All stations" })
+//   } catch (e) {
+//     next(e);
+//   }
+// });
 
 stationRouter.post('/nearby', async (req, res, next) => {
   const { minLat, maxLat, minLng, maxLng } = req.body;
@@ -34,6 +26,18 @@ stationRouter.post('/nearby', async (req, res, next) => {
     apiResponser({ req, res, data: targetStations, message: "Adjacent stations" })
   } catch (e) {
     next(e);
+  }
+})
+
+stationRouter.get('/:stationId', async (req, res, next) => {
+  const { stationId } = req.params;
+
+  try {
+    const targetStations = await Station.find({ stId: stationId })
+
+    apiResponser({ req, res, data: targetStations, message: "A station infomation" })
+  } catch (e) {
+    next(e)
   }
 })
 

@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { apiResponser } from './apiResponser.js';
 import { logger } from './logger.js';
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
   const errorObject = {
     timestamp: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss Z'),
     message: err?.message,
@@ -10,7 +10,7 @@ const errorHandler = (err, req, res, next) => {
     stack: err?.stack
   }
 
-  logger.error(errorObject);
+  logger.error(JSON.stringify(errorObject));
 
   apiResponser({ req, res, statusCode: err?.status || 500, data: errorObject, message: err?.message })
 }

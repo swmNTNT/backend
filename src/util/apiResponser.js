@@ -13,5 +13,5 @@ export const apiResponser = ({ req, res, statusCode = 200, data, message }) => {
     output = { ...output, message }
   }
 
-  res.status(statusCode).json(output)
+  return res.status(statusCode).json(output)
 }
