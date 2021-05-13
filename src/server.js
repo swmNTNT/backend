@@ -11,15 +11,15 @@ app.use("/", indexRouter);
 
 connectMongoDB();
 
-app.use((err) => {
-  if (err) {
-    return errorHandler(err);
+app.use((err, req, res, next) => {
+  if (err) {  
+    return errorHandler(err, req, res, next);
   }
 
   next()
 })
 
-app.use(() => {
+app.use((req, res) => {
   return res.status(404).json({ message: 'Not found exception' })
 })
 

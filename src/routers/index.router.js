@@ -10,27 +10,12 @@ indexRouter.get('/', (req, res, next) => {
 });
 
 indexRouter.get('/test', async (req, res, next) => {
-    try {
-        const openApiData = await getChargerInfo(1);
-        res.json(openApiData)
-    } catch (e) {
-        next(e)
-    }
+  try {
+    const openApiData = await getChargerInfo(1);
+    res.json(openApiData)
+  } catch (e) {
+    next(e)
+  }
 })
 
 indexRouter.use("/user", userRouter);
-
-
-// indexRouter.get('/:name', (req,res,next) => {
-//     const {name} = req.params;
-//     const {age} = req.query;
-
-//     res.status(200).json({message: `my name is : ${name} and your age is ${age}`});
-// });
-
-// indexRouter.post('/:id', (req,res,next) => {
-//     const {id} = req.params;
-//     const {email, hello} = req.body;
-
-//     res.status(200).json({message: `userId = ${id}, email = ${email} ${hello}`});
-// });

@@ -14,11 +14,6 @@ const userSchema = mongoose.Schema({
         required: true, 
         unique: 1
     },
-    phone: {
-        type: String,
-        trim: true,
-        maxlength: 11
-    },
     password: {
         type: String,
         maxlength: 50,
