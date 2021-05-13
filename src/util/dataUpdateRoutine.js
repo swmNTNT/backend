@@ -17,6 +17,8 @@ export const dataUpdateRoutine = async (req, res, next) => {
     await Station.remove()
     await Station.insertMany(bulkData)
     logger.info(`*** Ended data update routine`)
+
+
     break;
   }
 }
