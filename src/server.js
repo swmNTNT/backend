@@ -1,15 +1,21 @@
 import express from 'express';
+import compression from 'compression';
+
 import { indexRouter } from './routers/index.router.js';
 import { connectMongoDB } from './util/database.js';
 import errorHandler from './util/errorHandler.js';
+import { dataUpdateRoutine } from './util/dataUpdateRoutine.js';
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(compression());
 app.use("/", indexRouter);
 
+
 connectMongoDB();
+dataUpdateRoutine()
 
 app.use((err) => {
   if (err) {

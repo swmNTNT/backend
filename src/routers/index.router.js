@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userRouter from './user.router.js';
+import stationRouter from './station.router.js'
 import { getChargerInfo } from '../util/getFromOpenApi.js'
 
 export const indexRouter = Router();
@@ -19,7 +20,7 @@ indexRouter.get('/test', async (req, res, next) => {
 })
 
 indexRouter.use("/user", userRouter);
-
+indexRouter.use("/station", stationRouter);
 
 // indexRouter.get('/:name', (req,res,next) => {
 //     const {name} = req.params;
