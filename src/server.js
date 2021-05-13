@@ -18,18 +18,13 @@ app.use(cors({ origin: '*' }));
 connectMongoDB();
 dataUpdateRoutine();
 
-app.use((err, req, res, next) => {
-  if (err) {  
-    return errorHandler(err, req, res, next);
 app.use("/", indexRouter);
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   if (err) {
-    return errorHandler(err, req, res);
+    return errorHandler(err, req, res, next);
   }
-
-  next()
-})
+});
 
 app.use((req, res) => {
   apiResponser({ req, res, statusCode: 404, message: 'Not Found Exception' })
