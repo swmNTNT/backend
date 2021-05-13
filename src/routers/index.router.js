@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import userRouter from './user.router.js';
+import { getChargerInfo } from '../util/getFromOpenApi.js';
 import stationRouter from './station.router.js'
-import { getChargerInfo } from '../util/getFromOpenApi.js'
 
 const indexRouter = Router();
 

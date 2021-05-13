@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { config } from '../../config/config.js';
 
 export const getChargerInfo = async (idx) => {
 	var info = [];	
 	
-	let kecoURL = `http://apis.data.go.kr/B552584/EvCharger/getChargerInfo?serviceKey=g1Orb9XNX8ZMrCVO0NdBaJF1vpBBfP3eLbVDvyiy%2BdJGPEjlzXgxGGMS9h6gq2VtA9Us9gPWHZPrrTf9SG2WWw%3D%3D&numOfRows=7000&pageNo=${idx+1}`;
+	let kecoURL = `http://apis.data.go.kr/B552584/EvCharger/getChargerInfo?serviceKey=${config.serviceKey}&numOfRows=7000&pageNo=${idx+1}`;
 	const kecoItems = await (await axios.get(kecoURL)).data.items[0].item
 	
 	if (Array.isArray(kecoItems)) {

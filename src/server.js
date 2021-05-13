@@ -18,6 +18,9 @@ app.use(cors({ origin: '*' }));
 connectMongoDB();
 dataUpdateRoutine();
 
+app.use((err, req, res, next) => {
+  if (err) {  
+    return errorHandler(err, req, res, next);
 app.use("/", indexRouter);
 
 app.use((err, req, res) => {
