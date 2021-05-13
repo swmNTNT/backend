@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userRouter from './user.router.js';
+import { getKecoInfo } from '../util/getFromOpenApi.js'
 
 export const indexRouter = Router();
 
@@ -7,12 +8,16 @@ indexRouter.get('/', (req, res, next) => {
   res.status(200).json({ message: "hello world!" });
 });
 
-indexRouter.get('/error', (req, res, next) => {
-  try {
-    throw new Error('Hello Error router')
-  } catch (e) {
-    next(e)
-  }
+indexRouter.get('/test', async (req, res, next) => {
+    try {
+        const openApiData = await getKecoInfo();
+
+        // console.log(openApiData)
+
+        res.json(openApiData)
+    } catch (e) {
+        next(e)
+    }
 })
 
 indexRouter.use("/user", userRouter);
