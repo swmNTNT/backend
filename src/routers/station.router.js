@@ -7,6 +7,15 @@ import { apiResponser } from '../util/apiResponser.js';
 const stationRouter = Router();
 const { getDistance } = pkg;
 
+function compare(a, b) {
+  if (a.distanceFrom > b.distanceFrom) return 1;
+  if (b.distanceFrom > a.distanceFrom) return -1;
+
+  return 0;
+}
+
+// nums.sort(compare);
+
 stationRouter.post('/nearby', async (req, res, next) => {
   const { minLat, maxLat, minLng, maxLng, userLat, userLng } = req.body;
 
@@ -34,6 +43,8 @@ stationRouter.post('/nearby', async (req, res, next) => {
         resultValues.push(stationStatus);
       }
     }
+
+    resultValues.sort(compare)
 
     apiResponser({ req, res, data: resultValues, message: "Adjacent stations" })
   } catch (e) {
