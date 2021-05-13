@@ -6,14 +6,12 @@ export const indexRouter = Router();
 
 indexRouter.get('/', (req, res, next) => {
   res.status(200).json({ message: "hello world!" });
+
 });
 
 indexRouter.get('/test', async (req, res, next) => {
     try {
-        for (let i = 1; i < 11; i++) {
-            const openApiData = await getChargerInfo(i);
-            // DB 저장
-        }
+        const openApiData = await getChargerInfo(1);
         res.json(openApiData)
     } catch (e) {
         next(e)

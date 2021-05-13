@@ -6,7 +6,7 @@ const userRouter = Router();
 //GET : 모든 유저 리스트 response
 userRouter.get('/', async (req, res, next) => {
     const users = await User.find(); //모든 유저를 가져온다.
-
+    
     res.status(200).json(users); //모든 유저 response
 });
 
