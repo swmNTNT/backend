@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import userRouter from './user.router.js';
-import { getKecoInfo } from '../util/getFromOpenApi.js'
+import { getChargerInfo } from '../util/getFromOpenApi.js'
 
 export const indexRouter = Router();
 
@@ -10,10 +10,10 @@ indexRouter.get('/', (req, res, next) => {
 
 indexRouter.get('/test', async (req, res, next) => {
     try {
-        const openApiData = await getKecoInfo();
-
-        // console.log(openApiData)
-
+        for (let i = 1; i < 11; i++) {
+            const openApiData = await getChargerInfo(i);
+            // DB 저장
+        }
         res.json(openApiData)
     } catch (e) {
         next(e)

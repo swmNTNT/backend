@@ -10,7 +10,6 @@ app.use(express.json());
 app.use("/", indexRouter);
 
 connectMongoDB();
-app.listen(port);
 
 app.use((err) => {
   if (err) {
@@ -24,4 +23,5 @@ app.use(() => {
   return res.status(404).json({ message: 'Not found exception' })
 })
 
+app.listen(port);
 console.log(`server is running on port ${port}`);
