@@ -34,4 +34,5 @@ export default {
   lpush: promisify(redisClient.lpush).bind(redisClient),
   lpop: promisify(redisClient.lpop).bind(redisClient),
   lrange: promisify(redisClient.lrange).bind(redisClient),
+  del: promisify(redisClient.del).bind(redisClient),
 }
